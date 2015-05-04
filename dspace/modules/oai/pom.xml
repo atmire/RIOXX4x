@@ -17,8 +17,8 @@
     </parent>
 
     <properties>
-       <!-- This is the path to the root [dspace-src] directory. -->
-       <root.basedir>${basedir}/../../..</root.basedir>
+        <!-- This is the path to the root [dspace-src] directory. -->
+        <root.basedir>${basedir}/../../..</root.basedir>
     </properties>
 
     <build>
@@ -37,10 +37,20 @@
                             <filtering>true</filtering>
                             <directory>${basedir}/src/main/webapp</directory>
                             <includes>
-                                    <include>WEB-INF/web.xml</include>
+                                <include>WEB-INF/web.xml</include>
                             </includes>
                         </resource>
                     </webResources>
+                    <overlays>
+                        <overlay>
+                            <groupId>org.dspace</groupId>
+                            <artifactId>dspace-oai</artifactId>
+                            <type>war</type>
+                            <excludes>
+                                <exclude>WEB-INF/classes/**</exclude>
+                            </excludes>
+                        </overlay>
+                    </overlays>
                 </configuration>
                 <executions>
                     <execution>
@@ -99,16 +109,17 @@
             <artifactId>solr-core</artifactId>
             <version>${solr.version}</version>
             <exclusions>
-				<exclusion>
-					<groupId>jdk.tools</groupId>
-					<artifactId>jdk.tools</artifactId>
-				</exclusion>
-			</exclusions> 
+                <exclusion>
+                    <groupId>jdk.tools</groupId>
+                    <artifactId>jdk.tools</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
         </dependency>
+
     </dependencies>
 
     <developers>
