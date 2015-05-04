@@ -29,7 +29,7 @@
             <!-- Filter using the properties file defined by dspace-parent POM -->
             <filter>${filters.file}</filter>
         </filters>
-    
+
         <plugins>
             <!--  Default project assembly. Calls 'assembly.xml', which
                   generates the DSpace build directory. -->
@@ -114,7 +114,11 @@
     </profiles>
 
     <dependencies>
-    	<!-- This dependency ensures DSpace OAI JAR is added to [dspace]/lib/,
+        <dependency>
+            <groupId>org.dspace.modules</groupId>
+            <artifactId>additions</artifactId>
+        </dependency>
+        <!-- This dependency ensures DSpace OAI JAR is added to [dspace]/lib/,
              so that the 'dspace oai' launcher.xml command works.  -->
     	<dependency>
             <groupId>org.dspace</groupId>
