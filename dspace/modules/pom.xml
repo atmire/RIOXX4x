@@ -22,6 +22,10 @@
          as a dependency in most other modules in [src]/dspace/modules -->
     <modules>
         <module>additions</module>
+        <module>solr</module>
+        <module>oai</module>
+        <module>xmlui</module>
+
     </modules>
 
     <!-- 
