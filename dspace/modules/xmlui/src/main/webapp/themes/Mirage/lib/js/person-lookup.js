@@ -7,7 +7,7 @@
  */
 function AuthorLookup(url, authorityInput, collectionID) {
 
-    var authorField = url.indexOf("dc_contributor_author") != -1;
+    var authorField = url.indexOf(authorityInput) != -1;
 
 //    TODO i18n
     var content = $('<div title="Person Lookup">' +

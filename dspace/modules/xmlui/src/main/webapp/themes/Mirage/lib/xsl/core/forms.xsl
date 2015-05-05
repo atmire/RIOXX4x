@@ -285,11 +285,13 @@
 
     <!-- Fieldset (instanced) field stuff, in the case of non-composites -->
     <xsl:template match="dri:field[dri:field/dri:instance | dri:params/@operations]" priority="2">
+        <xsl:variable name="confidenceIndicatorID" select="concat(translate(@id,'.','_'),'_confidence_indicator')"/>
+
         <xsl:apply-templates select="dri:help" mode="help"/>
         <!-- Create the first field normally -->
         <xsl:apply-templates select="." mode="normalField"/>
         <!-- Follow it up with an ADD button if the add operation is specified. This allows
-            entering more than one value for this field. -->
+            entering more than one value for this fields-autd. -->
         <xsl:if test="contains(dri:params/@operations,'add')">
             <!-- Add buttons should be named "submit_[field]_add" so that we can ignore errors from required fields when simply adding new values-->
             <input type="submit" value="Add" name="{concat('submit_',@n,'_add')}" class="ds-button-field ds-add-button">
@@ -300,9 +302,10 @@
                 </xsl:attribute>
                </xsl:if>
                 <xsl:if test="dri:params/@choicesPresentation = 'authorLookup'">
-                    <xsl:attribute name="style">
-                        <xsl:text>display:none;</xsl:text>
-                    </xsl:attribute>
+                    <xsl:call-template name="addLookupButtonAuthor">
+                        <xsl:with-param name="isName" select="'true'"/>
+                        <xsl:with-param name="confIndicator" select="$confidenceIndicatorID"/>
+                    </xsl:call-template>
                 </xsl:if>
            </input>
         </xsl:if>
@@ -332,3 +335,4 @@
 
 
 </xsl:stylesheet>
+

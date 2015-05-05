@@ -28,6 +28,7 @@
     <bean name="AuthorityTypes" class="org.dspace.authority.AuthorityTypes">
         <property name="types">
             <list>
+                <bean class="org.dspace.authority.FunderAuthorityValue"/>
                 <bean class="org.dspace.authority.orcid.OrcidAuthorityValue"/>
                 <bean class="org.dspace.authority.PersonAuthorityValue"/>
             </list>
@@ -37,14 +38,17 @@
                 <entry key="dc_contributor_author">
                    <bean class="org.dspace.authority.PersonAuthorityValue"/>
                 </entry>
+                <entry key="dc_funder">
+                    <bean class="org.dspace.authority.FunderAuthorityValue"/>
+                </entry>
             </map>
         </property>
     </bean>
 
-  <alias name="OrcidSource" alias="AuthoritySource"/>
+  <!--<alias name="OrcidSource" alias="AuthoritySource"/>
     <bean name="OrcidSource" class="org.dspace.authority.orcid.Orcid">
         <constructor-arg value="http://pub.orcid.org"/>
-    </bean>
+    </bean>-->
 
 
 </beans>

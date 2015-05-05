@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.dspace</groupId>
     <artifactId>dspace</artifactId>
@@ -29,7 +30,7 @@
             <!-- Filter using the properties file defined by dspace-parent POM -->
             <filter>${filters.file}</filter>
         </filters>
-    
+
         <plugins>
             <!--  Default project assembly. Calls 'assembly.xml', which
                   generates the DSpace build directory. -->
@@ -82,53 +83,59 @@
             Instead, a zip/tarball is generated from the parent [dspace-src] directory.
         -->
         <profile>
-           <id>distributions</id>
-           <activation>
-              <activeByDefault>false</activeByDefault>
-           </activation>
-           <build>
-              <plugins>
-                 <plugin>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <inherited>false</inherited>
-                    <executions>
-                       <execution>
-                          <inherited>false</inherited>
-                          <configuration>
-                             <descriptors>
-                                <descriptor>src/main/assembly/release.xml</descriptor>
-                                <descriptor>src/main/assembly/src-release.xml</descriptor>
-                             </descriptors>
-                             <tarLongFileMode>gnu</tarLongFileMode>
-                             <finalName>dspace-${project.version}</finalName>
-                          </configuration>
-                          <phase>package</phase>
-                          <goals>
-                             <goal>single</goal>
-                          </goals>
-                       </execution>
-                    </executions>
-                 </plugin>
-              </plugins>
-           </build>
+            <id>distributions</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <inherited>false</inherited>
+                        <executions>
+                            <execution>
+                                <inherited>false</inherited>
+                                <configuration>
+                                    <descriptors>
+                                        <descriptor>src/main/assembly/release.xml</descriptor>
+                                        <descriptor>src/main/assembly/src-release.xml</descriptor>
+                                    </descriptors>
+                                    <tarLongFileMode>gnu</tarLongFileMode>
+                                    <finalName>dspace-${project.version}</finalName>
+                                </configuration>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
     </profiles>
 
     <dependencies>
-    	<!-- This dependency ensures DSpace OAI JAR is added to [dspace]/lib/,
+        <dependency>
+            <groupId>org.dspace.modules</groupId>
+
+            <artifactId>additions</artifactId>
+
+        </dependency>
+        <!-- This dependency ensures DSpace OAI JAR is added to [dspace]/lib/,
              so that the 'dspace oai' launcher.xml command works.  -->
-    	<dependency>
+        <dependency>
             <groupId>org.dspace</groupId>
             <artifactId>dspace-oai</artifactId>
             <type>jar</type>
             <classifier>classes</classifier>
-    	</dependency>
+        </dependency>
         <!-- The Servlet API is also needed by the 'dspace oai' launcher.xml
              command. -->
-    	<dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
-    	</dependency>
+        </dependency>
     </dependencies>
 </project>
