@@ -229,6 +229,7 @@
                <dspace.dir>/home2/${clientname}/dspace</dspace.dir>
                <dspace.url>https://dev.atmire.com/dspace-${clientname}</dspace.url>
                <dspace.hostname>dev.atmire.com</dspace.hostname>
+               <db.maxidle>1</db.maxidle>
                <db.name>postgres</db.name>
                <db.driver>org.postgresql.Driver</db.driver>
                <db.url>jdbc:postgresql://localhost:5432/dspace-${clientname}</db.url>

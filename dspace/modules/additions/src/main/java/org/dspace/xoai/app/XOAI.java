@@ -7,16 +7,8 @@
  */
 package org.dspace.xoai.app;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.ConnectException;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
+import com.lyncode.xoai.dataprovider.exceptions.MetadataBindException;
+import com.lyncode.xoai.dataprovider.util.MarshallingUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -31,13 +23,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
-import org.dspace.content.Bitstream;
-import org.dspace.content.Bundle;
-import org.dspace.content.Collection;
-import org.dspace.content.Community;
-import org.dspace.content.DCValue;
-import org.dspace.content.Item;
-import org.dspace.content.ItemIterator;
+import org.dspace.content.*;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Constants;
 import org.dspace.core.Context;
@@ -54,8 +40,13 @@ import org.dspace.xoai.util.ItemUtils;
 import org.dspace.xoai.util.XOAICacheManager;
 import org.dspace.xoai.util.XOAIDatabaseManager;
 
-import com.lyncode.xoai.dataprovider.exceptions.MetadataBindException;
-import com.lyncode.xoai.dataprovider.util.MarshallingUtils;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * 
@@ -74,28 +65,6 @@ public class XOAI
     
     private boolean _clean;
 
-    private static List<String> getFileFormats(Item item)
-    {
-        List<String> formats = new ArrayList<String>();
-        try
-        {
-            for (Bundle b : item.getBundles("ORIGINAL"))
-            {
-                for (Bitstream bs : b.getBitstreams())
-                {
-                    if (!formats.contains(bs.getFormat().getMIMEType()))
-                    {
-                        formats.add(bs.getFormat().getMIMEType());
-                    }
-                }
-            }
-        }
-        catch (SQLException ex)
-        {
-            log.error(ex.getMessage(), ex);
-        }
-        return formats;
-    }
 
     public XOAI(Context context, boolean optimize, boolean clean, boolean verbose)
     {
@@ -297,10 +266,7 @@ public class XOAI
             }
         }
 
-        for (String f : getFileFormats(item))
-        {
-            doc.addField("metadata.dc.format.mimetype", f);
-        }
+
         
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             MarshallingUtils.writeMetadata(out, ItemUtils.retrieveMetadata(item));

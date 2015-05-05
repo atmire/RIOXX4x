@@ -8,8 +8,9 @@ import org.dspace.core.Context;
 import org.dspace.handle.HandleManager;
 import org.dspace.xoai.data.DSpaceItem;
 import org.dspace.xoai.filter.DSpaceFilter;
-import org.dspace.xoai.filter.results.DatabaseFilterResult;
-import org.dspace.xoai.filter.results.SolrFilterResult;
+import org.dspace.xoai.filter.DatabaseFilterResult;
+import org.dspace.xoai.filter.SolrFilterResult;
+
 
 import java.sql.SQLException;
 
@@ -25,16 +26,16 @@ public class ItemsWithBitstreamFilter extends DSpaceFilter {
 
     public ItemsWithBitstreamFilter(Context context) {
         this.context = context;
-    }
 
+    }
     @Override
-    public DatabaseFilterResult buildDatabaseQuery(Context context) {
+    public DatabaseFilterResult getWhere(Context context) {
         return new DatabaseFilterResult();
     }
 
     @Override
-    public SolrFilterResult buildSolrQuery() {
-    return new SolrFilterResult("item.hasbitstream:true");
+    public SolrFilterResult getQuery() {
+        return new SolrFilterResult("item.hasbitstream:true");
     }
 
     @Override
@@ -43,8 +44,8 @@ public class ItemsWithBitstreamFilter extends DSpaceFilter {
             String handle = DSpaceItem.parseHandle(item.getIdentifier());
             if (handle == null) return false;
             Item dspaceItem = (Item) HandleManager.resolveToObject(context, handle);
-            for (Bundle b : dspaceItem.getBundles("ORIGINAL")){
-                if(b.getBitstreams().length>0) {
+            for (Bundle b : dspaceItem.getBundles("ORIGINAL")) {
+                if (b.getBitstreams().length > 0) {
                     return true;
                 }
             }
