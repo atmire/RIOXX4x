@@ -53,6 +53,11 @@ public class AuthorityValueFinder {
         String queryString = "value:" + value + " AND field:" + field;
         return find(context, queryString);
     }
+    public AuthorityValue findByFunderID(Context context, String funderID) {
+        String queryString = "label_funderID:\"" + funderID + "\"";
+        List<AuthorityValue> findings = find(context, queryString);
+        return findings.size() > 0 ? findings.get(0) : null;
+    }
 
     public List<AuthorityValue> findByValue(Context context, String schema, String element, String qualifier, String value) {
         String field = fieldParameter(schema, element, qualifier);

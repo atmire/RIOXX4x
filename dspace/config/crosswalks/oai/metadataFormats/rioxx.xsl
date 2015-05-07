@@ -173,11 +173,24 @@
                 </rioxxterms:version_of_record>
             </xsl:for-each>
 
+            <xsl:variable name="projectIdentifier">
+                <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='project']/doc:element/doc:field[@name='value']"/>
+
+            </xsl:variable>
             <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='funder']">
                 <rioxxterms:project>
-                    <xls:value-of select="."/>
+                    <xsl:attribute name="funder_name">
+                        <xls:value-of select="//doc:element/doc:field[@name='value']"/>
+                    </xsl:attribute>
+                    <xsl:if test="//doc:element/doc:field[@name='authorityID']">
+                        <xsl:attribute name="funder_id">
+                            <xls:value-of select="//doc:element/doc:field[@name='authorityID']"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:value-of select="$projectIdentifier"/>
                 </rioxxterms:project>
             </xsl:for-each>
+
 
         </rioxx:rioxx>
     </xsl:template>
