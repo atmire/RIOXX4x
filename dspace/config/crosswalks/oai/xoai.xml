@@ -171,6 +171,7 @@
             <XSLT>metadataFormats/rioxx.xsl</XSLT>
             <Namespace>http://www.rioxx.net/schema/v2.0/rioxx/</Namespace>
             <SchemaLocation>http://www.rioxx.net/schema/v2.0/rioxx/rioxx.xsd</SchemaLocation>
+            <Filter refid="atleastOneMetadataFilter" />
         </Format>
     </Formats>
 
@@ -269,6 +270,32 @@
                 <Value>Thesis</Value>
             </Parameter>
         </Filter>
+
+        <Filter id="atleastOneMetadataFilter">
+            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
+            <Parameter key="field">
+                <Value>dc.type</Value>
+            </Parameter>
+                <Parameter key="operator">
+                <Value>ends_with</Value>
+            </Parameter>
+            <Parameter>
+                <Value>Book</Value>
+                <Value>Book chapter</Value>
+                <Value>Book edited</Value>
+                <Value>Conference Paper/Proceeding/Abstract</Value>
+                <Value>Journal Article/Review</Value>
+                <Value>Manual/Guide</Value>
+                <Value>Monograph</Value>
+                <Value>Policy briefing report</Value>
+                <Value>Technical Report</Value>
+                <Value>Technical Standard</Value>
+                <Value>Thesis</Value>
+                <Value>Consultancy Report</Value>
+                <Value>Working paper</Value>
+            </Parameter>
+        </Filter>
+
     </Filters>
 
     <Sets>

@@ -180,11 +180,11 @@
             <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='funder']">
                 <rioxxterms:project>
                     <xsl:attribute name="funder_name">
-                        <xls:value-of select="//doc:element/doc:field[@name='value']"/>
+                        <xls:value-of select="doc:element/doc:field[@name='value']"/>
                     </xsl:attribute>
-                    <xsl:if test="//doc:element/doc:field[@name='authorityID']">
+                    <xsl:if test="doc:field[@name='authorityID']">
                         <xsl:attribute name="funder_id">
-                            <xls:value-of select="//doc:element/doc:field[@name='authorityID']"/>
+                            <xls:value-of select="doc:field[@name='authorityID']"/>
                         </xsl:attribute>
                     </xsl:if>
                     <xsl:value-of select="$projectIdentifier"/>
