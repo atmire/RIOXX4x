@@ -25,7 +25,7 @@
 
             <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='available']/doc:element/doc:field[@name='value']">
                 <ali:free_to_read>
-                    <xsl:attribute name="start_date">
+                    <xsl:attribute name="ali:start_date">
                         <xsl:value-of select="." />
                     </xsl:attribute>
                 </ali:free_to_read>
@@ -86,7 +86,12 @@
                 </dc:relation>
             </xsl:for-each>
 
-            <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element/doc:element/doc:field[@name='value']">
+            <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='isbn']/doc:element/doc:field[@name='value']">
+                <dc:source>
+                    <xls:value-of select="."/>
+                </dc:source>
+            </xsl:for-each>
+            <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='identifier']/doc:element[@name='issn']/doc:element/doc:field[@name='value']">
                 <dc:source>
                     <xls:value-of select="."/>
                 </dc:source>
@@ -179,11 +184,11 @@
             </xsl:variable>
             <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='funder']">
                 <rioxxterms:project>
-                    <xsl:attribute name="funder_name">
+                    <xsl:attribute name="rioxxterms:funder_name">
                         <xls:value-of select="doc:element/doc:field[@name='value']"/>
                     </xsl:attribute>
                     <xsl:if test="doc:field[@name='authorityID']">
-                        <xsl:attribute name="funder_id">
+                        <xsl:attribute name="rioxxterms:funder_id">
                             <xls:value-of select="doc:field[@name='authorityID']"/>
                         </xsl:attribute>
                     </xsl:if>
