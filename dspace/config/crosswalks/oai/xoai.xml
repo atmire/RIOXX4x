@@ -86,6 +86,10 @@
         </Context>
         <Context baseurl="rioxx">
             <Transformer refid="rioxxTransformer"/>
+
+            <Filter refid="atleastOneMetadataFilter" />
+            <Filter refid="itemsWithBitstreamsFilter" />
+
             <Format refid="rioxx" />
         </Context>
     </Contexts>
@@ -171,7 +175,6 @@
             <XSLT>metadataFormats/rioxx.xsl</XSLT>
             <Namespace>http://www.rioxx.net/schema/v2.0/rioxx/</Namespace>
             <SchemaLocation>http://www.rioxx.net/schema/v2.0/rioxx/rioxx.xsd</SchemaLocation>
-            <Filter refid="atleastOneMetadataFilter" />
         </Format>
     </Formats>
 
@@ -295,6 +298,11 @@
                 <Value>Working paper</Value>
             </Parameter>
         </Filter>
+
+        <Filter id="itemsWithBitstreamsFilter">
+            <Class>com.atmire.xoai.filter.ItemsWithBitstreamFilter</Class>
+        </Filter>
+
 
     </Filters>
 

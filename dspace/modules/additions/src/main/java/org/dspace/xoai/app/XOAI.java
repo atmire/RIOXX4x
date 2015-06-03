@@ -277,7 +277,16 @@ public class XOAI
             println("Item with handle "+handle+" indexed");
         }
         
-        
+        boolean hasBitstream = false;
+
+        for (Bundle b : item.getBundles("ORIGINAL")){
+            if(b.getBitstreams().length>0) {
+                hasBitstream = true;
+            }
+        }
+
+        doc.addField("item.hasbitstream", hasBitstream);
+
         return doc;
     }
 
