@@ -282,7 +282,7 @@
                 <Parameter key="operator">
                 <Value>ends_with</Value>
             </Parameter>
-            <Parameter>
+            <Parameter key="value">
                 <Value>Book</Value>
                 <Value>Book chapter</Value>
                 <Value>Book edited</Value>
