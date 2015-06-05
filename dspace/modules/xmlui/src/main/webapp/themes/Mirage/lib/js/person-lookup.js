@@ -10,7 +10,7 @@ function AuthorLookup(url, authorityInput, collectionID) {
     var authorField = url.indexOf(authorityInput) != -1;
 
 //    TODO i18n
-    var content = $('<div title="Person Lookup">' +
+    var content = $('<div title="Funder Lookup">' +
     '<table class="dttable">' +
     '<thead>' +
     '<th>Name</th>' +
@@ -27,7 +27,7 @@ function AuthorLookup(url, authorityInput, collectionID) {
     '<span/>' +
     '</li>' +
     '<li class="vcard-add">' +
-    '<input class="ds-button-field" value="Add This Person" type="button"/>' +
+    '<input class="ds-button-field" value="Add This Funder" type="button"/>' +
     '</li>' +
     '</ul>' +
     '</div>');

@@ -73,6 +73,8 @@ public class EditItemMetadataForm extends AbstractDSpaceTransformer {
                 pageMeta.addMetadata("choice", "collection").addContent(String.valueOf(collectionID));
                 pageMeta.addMetadata("title").addContent(T_title);
 
+            pageMeta.addMetadata("stylesheet", "screen", "person-lookup", true).addContent("../../static/css/authority/person-lookup.css");
+
                 pageMeta.addTrailLink(contextPath + "/", T_dspace_home);
                 pageMeta.addTrailLink(contextPath + "/admin/item", T_item_trail);
                 pageMeta.addTrail().addContent(T_trail);

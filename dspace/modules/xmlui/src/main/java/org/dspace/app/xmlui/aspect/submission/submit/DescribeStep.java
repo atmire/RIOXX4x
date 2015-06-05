@@ -127,6 +127,8 @@ public class DescribeStep extends AbstractSubmissionStep
             int collectionID = submission.getCollection().getID();
             pageMeta.addMetadata("choice", "collection").addContent(String.valueOf(collectionID));
 
+            pageMeta.addMetadata("stylesheet", "screen", "person-lookup", true).addContent("../../static/css/authority/person-lookup.css");
+
             String jumpTo = submissionInfo.getJumpToField();
             if (jumpTo != null)
             {
