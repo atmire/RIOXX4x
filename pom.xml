@@ -221,7 +221,6 @@
    
    <profiles>
 
-
        <!-- By default the main dspace.cfg file will be filtered during the build
             using the "build.properties" file. This profile takes effect, unless
             "-Denv" is passed in (see 'environment' profile below for more info). -->
