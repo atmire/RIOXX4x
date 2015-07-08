@@ -7,7 +7,7 @@
  */
 package org.dspace.authority.rest;
 
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.dspace.authority.util.XMLUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -47,7 +47,7 @@ public class RESTConnector {
         String fullPath = url + '/' + path;
         HttpGet httpGet = new HttpGet(fullPath);
         try {
-            HttpClient httpClient = HttpClientBuilder.create().build();
+            HttpClient httpClient = new DefaultHttpClient();
             HttpResponse getResponse = httpClient.execute(httpGet);
             //do not close this httpClient
             result = getResponse.getEntity().getContent();
