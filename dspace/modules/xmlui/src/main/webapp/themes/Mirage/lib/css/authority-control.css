@@ -81,4 +81,4 @@ input.ds-authority-lock.is-unlocked
   { background-image: url(../../images/authority_control/unlock24.png); }
 
 #aspect_general_ChoiceLookupTransformer_div_lookup select {height: auto;}
-#aspect_submission_StepTransformer_field_dc_funder_confidence_indicator{display:none;}
+#aspect_submission_StepTransformer_field_rioxx_funder_confidence_indicator{display:none;}

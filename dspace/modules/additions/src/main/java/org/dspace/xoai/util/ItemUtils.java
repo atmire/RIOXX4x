@@ -7,12 +7,10 @@
  */
 package org.dspace.xoai.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.List;
-
+import com.lyncode.xoai.dataprovider.util.Base64Utils;
+import com.lyncode.xoai.dataprovider.xml.xoai.Element;
+import com.lyncode.xoai.dataprovider.xml.xoai.Metadata;
+import com.lyncode.xoai.dataprovider.xml.xoai.ObjectFactory;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.dspace.authority.AuthorityValue;
@@ -30,10 +28,11 @@ import org.dspace.core.Context;
 import org.dspace.core.Utils;
 import org.dspace.xoai.data.DSpaceDatabaseItem;
 
-import com.lyncode.xoai.dataprovider.util.Base64Utils;
-import com.lyncode.xoai.dataprovider.xml.xoai.Element;
-import com.lyncode.xoai.dataprovider.xml.xoai.Metadata;
-import com.lyncode.xoai.dataprovider.xml.xoai.ObjectFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -112,7 +111,7 @@ public class ItemUtils
                     }
                     valueElem = qualifier;
                 }
-                if(val.schema.equals("dc")&&val.element.equals("funder")){
+                if(val.schema.equals("rioxx")&&val.element.equals("funder")){
                     try {
                         AuthorityValueFinder authorityValueFinder = new AuthorityValueFinder();
                         AuthorityValue authorityValue =authorityValueFinder.findByUID(new Context(), val.authority);
