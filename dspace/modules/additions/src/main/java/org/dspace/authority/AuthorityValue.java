@@ -7,8 +7,8 @@
  */
 package org.dspace.authority;
 
-import com.atmire.util.DcValueUtils;
-import com.atmire.util.ItemUtils;
+import org.dspace.util.DcValueUtils;
+import org.dspace.util.ItemUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.common.SolrDocument;

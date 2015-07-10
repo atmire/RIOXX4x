@@ -7,9 +7,7 @@
  */
 package org.dspace.authority.indexer;
 
-import com.atmire.util.ItemUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.AuthorityValueFinder;
 import org.dspace.authority.AuthorityValueGenerator;
@@ -18,13 +16,11 @@ import org.apache.log4j.Logger;
 import org.dspace.content.DCValue;
 import org.dspace.content.Item;
 import org.dspace.content.ItemIterator;
-import org.dspace.core.ConfigurationManager;
 import org.dspace.core.Context;
 import org.dspace.services.ConfigurationService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;

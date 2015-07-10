@@ -7,7 +7,7 @@
  */
 package org.dspace.authority;
 
-import com.atmire.util.ItemUtils;
+import org.dspace.util.ItemUtils;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 import org.dspace.content.DCValue;
