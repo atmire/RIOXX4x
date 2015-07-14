@@ -182,8 +182,23 @@ public class ItemUtils
                 Element bitstreams = create(factory, "bitstreams");
                 bundle.getElement().add(bitstreams);
                 Bitstream[] bits = b.getBitstreams();
-                for (Bitstream bit : bits)
-                {
+
+                Bitstream bit = null;
+
+                for (Bitstream bitstream : bits) {
+
+                    if (b.getPrimaryBitstreamID() != -1) {
+                        if (bit.getID() == b.getPrimaryBitstreamID()) {
+                            bit = bitstream;
+                        }
+                    } else if (b.getName().equals("ORIGINAL")) {
+                        bit = bitstream;
+                    }
+
+                }
+
+                if (bit != null) {
+
                     Element bitstream = create(factory, "bitstream");
                     bitstreams.getElement().add(bitstream);
                     String url = "";
@@ -227,14 +242,7 @@ public class ItemUtils
                     String name = bit.getName();
                     String description = bit.getDescription();
 
-                    if(b.getPrimaryBitstreamID()!=-1) {
-                        if(bit.getID() == b.getPrimaryBitstreamID()) {
                             addEmbargoField(bit,bitstream);
-                        }
-                    }
-                    else if(b.getName().equals("ORIGINAL")){
-                        addEmbargoField(bit,bitstream);
-                    }
 
                     if (name != null)
                         bitstream.getField().add(
