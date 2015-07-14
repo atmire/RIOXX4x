@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- 
+<!--
 
 
     The contents of this file are subject to the license and copyright
@@ -30,30 +30,30 @@
                         <xsl:value-of select="doc:metadata/doc:element[@name='bundles']/doc:element[@name='bundle']/doc:element[@name='bitstreams']/doc:element[@name='bitstream']/doc:field[@name='embargo']" />
                     </xsl:attribute>
                 </xsl:if>
-                </ali:free_to_read>
+            </ali:free_to_read>
 
-                <ali:license_ref>
+            <ali:license_ref>
                 <xsl:choose>
                     <xsl:when
                             test="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='uri']/doc:element/doc:field[@name='value']">
-                    <xsl:attribute name="start_date">
+                        <xsl:attribute name="start_date">
                             <xsl:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='date']/doc:element[@name='issued']/doc:element/doc:field[@name='value']" />
-                    </xsl:attribute>
+                        </xsl:attribute>
                         <xls:value-of select="doc:metadata/doc:element[@name='dc']/doc:element[@name='rights']/doc:element[@name='uri']/doc:element/doc:field[@name='value']"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:attribute name="start_date">
-                            <xsl:value-of select="doc:metadata/doc:element[@name='ali']/doc:element[@name='license_ref']/doc:element[@name='startdate']/doc:element/doc:field[@name='value']" />
+                            <xsl:value-of select="doc:metadata/doc:element[@name='rioxx']/doc:element[@name='license_ref']/doc:element[@name='startdate']/doc:element/doc:field[@name='value']" />
                         </xsl:attribute>
-                        <xls:value-of select="doc:metadata/doc:element[@name='ali']/doc:element[@name='license_ref']/doc:element[@name='uri']/doc:element/doc:field[@name='value']"/>
+                        <xls:value-of select="doc:metadata/doc:element[@name='rioxx']/doc:element[@name='license_ref']/doc:element[@name='uri']/doc:element/doc:field[@name='value']"/>
                     </xsl:otherwise>
                 </xsl:choose>
-                </ali:license_ref>
+            </ali:license_ref>
 
             <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='coverage']/doc:element/doc:element/doc:field[@name='value']">
-                    <dc:coverage>
-                        <xls:value-of select="."/>
-                    </dc:coverage>
+                <dc:coverage>
+                    <xls:value-of select="."/>
+                </dc:coverage>
             </xsl:for-each>
 
             <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='description']/doc:element[@name='abstract']/doc:element/doc:field[@name='value']">
@@ -122,7 +122,7 @@
                 </dcterms:dateAccepted>
             </xsl:for-each>
 
-            <xsl:for-each select="doc:metadata/doc:element[@name='rioxxterms']/doc:element[@name='apc']/doc:element/doc:field[@name='value']">
+            <xsl:for-each select="doc:metadata/doc:element[@name='rioxx']/doc:element[@name='apc']/doc:element/doc:field[@name='value']">
                 <rioxxterms:apc>
                     <xls:value-of select="."/>
                 </rioxxterms:apc>
@@ -131,16 +131,16 @@
 
             <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='contributor']/doc:element[@name='author']/doc:element/doc:field[@name='value']">
                 <rioxxterms:author>
-                <xsl:attribute name="first-named-author">
-                    <xsl:choose>
-                        <xsl:when test="position()=1">
-                            <xsl:text>true</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>false</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
+                    <xsl:attribute name="first-named-author">
+                        <xsl:choose>
+                            <xsl:when test="position()=1">
+                                <xsl:text>true</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>false</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
                     <xls:value-of select="."/>
                 </rioxxterms:author>
             </xsl:for-each>
@@ -158,18 +158,18 @@
             </xsl:for-each>
 
             <xsl:for-each select="doc:metadata/doc:element[@name='dc']/doc:element[@name='type']/doc:element/doc:field[@name='value']">
-               <rioxxterms:type>
+                <rioxxterms:type>
                     <xls:value-of select="."/>
                 </rioxxterms:type>
             </xsl:for-each>
 
-            <xsl:for-each select="doc:metadata/doc:element[@name='rioxxterms']/doc:element[@name='version']/doc:element/doc:field[@name='value']">
+            <xsl:for-each select="doc:metadata/doc:element[@name='rioxx']/doc:element[@name='version']/doc:element/doc:field[@name='value']">
                 <rioxxterms:version>
                     <xls:value-of select="."/>
                 </rioxxterms:version>
             </xsl:for-each>
 
-            <xsl:for-each select="doc:metadata/doc:element[@name='rioxxterms']/doc:element[@name='version_of_record']/doc:element/doc:field[@name='value']">
+            <xsl:for-each select="doc:metadata/doc:element[@name='rioxx']/doc:element[@name='version_of_record']/doc:element/doc:field[@name='value']">
                 <rioxxterms:version_of_record>
                     <xls:value-of select="."/>
                 </rioxxterms:version_of_record>
