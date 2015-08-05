@@ -283,6 +283,7 @@
                 <Value>ends_with</Value>
             </Parameter>
             <Parameter key="value">
+                <Value>Article</Value>
                 <Value>Book</Value>
                 <Value>Book chapter</Value>
                 <Value>Book edited</Value>
@@ -296,6 +297,7 @@
                 <Value>Thesis</Value>
                 <Value>Consultancy Report</Value>
                 <Value>Working paper</Value>
+                <Value>Working Paper</Value>
             </Parameter>
         </Filter>
 
