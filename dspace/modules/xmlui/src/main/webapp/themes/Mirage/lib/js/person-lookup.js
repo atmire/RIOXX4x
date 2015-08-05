@@ -7,7 +7,7 @@
  */
 function AuthorLookup(url, authorityInput, collectionID) {
 
-    var authorField = url.indexOf(authorityInput) != -1;
+    var funderField = url.indexOf("rioxx_funder") != -1;
 
 //    TODO i18n
     var content = $('<div title="Lookup">' +
@@ -19,7 +19,7 @@ function AuthorLookup(url, authorityInput, collectionID) {
     '<tr><td>Loading...<td></tr>' +
     '</tbody>' +
     '</table>' +
-    '<span class="no-vcard-selected">There\'s no one selected</span>' +
+    '<span class="no-vcard-selected">No result selected</span>' +
     '<ul class="vcard" style="display: none;">' +
     '<li><ul class="variable"/></li>' +
     '<li class="vcard-insolr">' +
@@ -72,7 +72,11 @@ function AuthorLookup(url, authorityInput, collectionID) {
                 autoOpen: true,
                 resizable: false,
                 modal: false,
-                width: 600
+                width: 600,
+                close: function(event, ui)
+                {
+                    $(this).dialog('destroy').remove();
+                }
             });
             $('.dataTables_wrapper').parent().attr('style', 'width: auto; min-height: 121px; height: auto;');
             var searchFilter = $('.dataTables_filter > input');
@@ -121,15 +125,18 @@ function AuthorLookup(url, authorityInput, collectionID) {
 
                 var notDisplayed = ['insolr', 'value', 'authority'];
                 var predefinedOrder = ['last-name', 'first-name'];
-                if (authorField) {
+                if (funderField) {
                     notDisplayed.push(['last-name', 'first-name']);
                     predefinedOrder = [];
                 }
                 var variable = vcard.find('.variable');
                 variable.empty();
+
+                    if(!funderField) {
                 predefinedOrder.forEach(function (entry) {
                     variableItem(aData, entry, variable);
                 });
+                    }
 
                 for (var key in aData) {
                     if (aData.hasOwnProperty(key) && notDisplayed.indexOf(key) < 0 && predefinedOrder.indexOf(key) < 0) {
@@ -199,11 +206,14 @@ function AuthorLookup(url, authorityInput, collectionID) {
                 wrapper.find('.vcard-wrapper .vcard:visible').hide();
                 wrapper.find('.vcard-wrapper .no-vcard-selected:hidden').show();
             }
-            $('#lookup-more-button').click(function () {
+
+            $('body').undelegate();
+
+            $('body').delegate('#lookup-more-button', 'click', function(){
                 button = lessButton;
                 datatable.fnFilter($('.dataTables_filter > input').val());
             });
-            $('#lookup-less-button').click(function () {
+            $('body').delegate('#lookup-less-button', 'click', function(){
                 button = moreButton;
                 datatable.fnFilter($('.dataTables_filter > input').val());
             });

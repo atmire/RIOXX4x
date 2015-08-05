@@ -7,9 +7,6 @@
  */
 package org.dspace.content.authority;
 
-import org.dspace.authority.AuthoritySearchService;
-import org.dspace.authority.AuthorityValue;
-import org.dspace.authority.rest.RestSource;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -17,13 +14,13 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.CommonParams;
+import org.dspace.authority.AuthoritySearchService;
+import org.dspace.authority.AuthorityValue;
+import org.dspace.authority.rest.RestSource;
 import org.dspace.core.ConfigurationManager;
 import org.dspace.utils.DSpace;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -35,10 +32,16 @@ import java.util.Map;
 public class SolrAuthority implements ChoiceAuthority {
 
     private static final Logger log = Logger.getLogger(SolrAuthority.class);
-    private RestSource source = new DSpace().getServiceManager().getServiceByName("AuthoritySource", RestSource.class);
+    //private RestSource source = new DSpace().getServiceManager().getServiceByName("AuthoritySource", RestSource.class);
+    private RestSource source =null;
+    private Map <String,RestSource>restSources = new DSpace().getServiceManager().getServiceByName("AuthoritySource", HashMap.class);
     private boolean externalResults = false;
 
     public Choices getMatches(String field, String text, int collection, int start, int limit, String locale, boolean bestMatch) {
+        source = null;
+        if(restSources.containsKey(field)){
+            source=restSources.get(field);
+        }
         if(limit == 0)
             limit = 10;
 
@@ -172,7 +175,8 @@ public class SolrAuthority implements ChoiceAuthority {
     }
 
     private String toQuery(String searchField, String text) {
-        return searchField + ":\"" + text.toLowerCase().replaceAll(":", "\\:") + "*\" or " + searchField + ":\"" + text.toLowerCase().replaceAll(":", "\\:")+"\"";
+//        return searchField + ":\"" + text.toLowerCase().replaceAll(":", "\\:") + "*\" or " + searchField + ":\"" + text.toLowerCase().replaceAll(":", "\\:")+"\"";
+        return searchField + ":" + text.toLowerCase().replaceAll(":", "\\:") + "* OR " + searchField + ":" + text.toLowerCase().replaceAll(":", "\\:") + "";
     }
 
     @Override
