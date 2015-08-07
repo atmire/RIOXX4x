@@ -87,7 +87,7 @@
         <Context baseurl="rioxx">
             <Transformer refid="rioxxTransformer"/>
 
-            <Filter refid="atleastOneMetadataFilter" />
+            <Filter refid="rioxxTypeExistsFilter" />
             <Filter refid="itemsWithBitstreamsFilter" />
 
             <Format refid="rioxx" />
@@ -274,35 +274,17 @@
             </Parameter>
         </Filter>
 
-        <Filter id="atleastOneMetadataFilter">
-            <Class>org.dspace.xoai.filter.DSpaceAtLeastOneMetadataFilter</Class>
-            <Parameter key="field">
+        <Filter id="rioxxTypeExistsFilter">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Parameter key="fields">
                 <Value>dc.type</Value>
-            </Parameter>
-                <Parameter key="operator">
-                <Value>ends_with</Value>
-            </Parameter>
-            <Parameter key="value">
-                <Value>Article</Value>
-                <Value>Book</Value>
-                <Value>Book chapter</Value>
-                <Value>Book edited</Value>
-                <Value>Conference Paper/Proceeding/Abstract</Value>
-                <Value>Journal Article/Review</Value>
-                <Value>Manual/Guide</Value>
-                <Value>Monograph</Value>
-                <Value>Policy briefing report</Value>
-                <Value>Technical Report</Value>
-                <Value>Technical Standard</Value>
-                <Value>Thesis</Value>
-                <Value>Consultancy Report</Value>
-                <Value>Working paper</Value>
-                <Value>Working Paper</Value>
+                <Value>rioxxterms.type</Value>
             </Parameter>
         </Filter>
 
+
         <Filter id="itemsWithBitstreamsFilter">
-            <Class>org.dspace.xoai.xoai.filter.ItemsWithBitstreamFilter</Class>
+            <Class>org.dspace.xoai.filter.ItemsWithBitstreamFilter</Class>
         </Filter>
 
 

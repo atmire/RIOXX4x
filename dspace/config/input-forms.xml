@@ -85,7 +85,7 @@
        </field>
 
          <field>
-             <dc-schema>rioxx</dc-schema>
+         <dc-schema>rioxxterms</dc-schema>
              <dc-element>funder</dc-element>
              <repeatable>true</repeatable>
              <label>Funder</label>
@@ -95,7 +95,7 @@
          </field>
 
          <field>
-             <dc-schema>rioxx</dc-schema>
+             <dc-schema>rioxxterms</dc-schema>
              <dc-element>identifier</dc-element>
              <dc-qualifier>project</dc-qualifier>
              <repeatable>true</repeatable>
@@ -174,8 +174,8 @@ it, please enter the types and the actual numbers or codes below.</hint>
 
 
        <field>
-         <dc-schema>rioxx</dc-schema>
-         <dc-element>license_ref</dc-element>
+         <dc-schema>rioxxterms</dc-schema>
+         <dc-element>licenseref</dc-element>
          <dc-qualifier>uri</dc-qualifier>
          <repeatable>false</repeatable>
          <label>License uri</label>
@@ -185,8 +185,8 @@ it, please enter the types and the actual numbers or codes below.</hint>
        </field>
 
        <field>
-         <dc-schema>rioxx</dc-schema>
-         <dc-element>license_ref</dc-element>
+         <dc-schema>rioxxterms</dc-schema>
+         <dc-element>licenseref</dc-element>
          <dc-qualifier>startdate</dc-qualifier>
          <repeatable>false</repeatable>
          <label>License start date</label>
@@ -207,7 +207,7 @@ it, please enter the types and the actual numbers or codes below.</hint>
        </field>
 
        <field>
-         <dc-schema>rioxx</dc-schema>
+         <dc-schema>rioxxterms</dc-schema>
          <dc-element>version</dc-element>
          <dc-qualifier></dc-qualifier>
          <repeatable>false</repeatable>
@@ -218,8 +218,8 @@ it, please enter the types and the actual numbers or codes below.</hint>
        </field>
 
        <field>
-         <dc-schema>rioxx</dc-schema>
-         <dc-element>version_of_record </dc-element>
+         <dc-schema>rioxxterms</dc-schema>
+         <dc-element>versionofrecord </dc-element>
          <dc-qualifier></dc-qualifier>
          <repeatable>false</repeatable>
          <label>DOI</label>

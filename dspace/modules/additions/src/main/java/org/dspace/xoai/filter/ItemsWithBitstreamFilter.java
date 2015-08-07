@@ -1,4 +1,4 @@
-package org.dspace.xoai.xoai.filter;
+package org.dspace.xoai.filter;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -7,9 +7,6 @@ import org.dspace.content.Item;
 import org.dspace.core.Context;
 import org.dspace.handle.HandleManager;
 import org.dspace.xoai.data.DSpaceItem;
-import org.dspace.xoai.filter.DSpaceFilter;
-import org.dspace.xoai.filter.DatabaseFilterResult;
-import org.dspace.xoai.filter.SolrFilterResult;
 
 import java.sql.SQLException;
 
