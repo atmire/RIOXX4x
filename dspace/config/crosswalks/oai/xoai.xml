@@ -91,6 +91,7 @@
             <Filter refid="itemsWithBitstreamsFilter" />
 
             <Format refid="rioxx" />
+            <Format refid="xoai" />
         </Context>
     </Contexts>
 

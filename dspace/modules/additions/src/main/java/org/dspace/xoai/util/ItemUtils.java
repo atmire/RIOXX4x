@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.dspace.authority.AuthorityValue;
 import org.dspace.authority.AuthorityValueFinder;
 import org.dspace.authority.FunderAuthorityValue;
+import org.dspace.authority.orcid.OrcidAuthorityValue;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.authorize.AuthorizeManager;
 import org.dspace.authorize.ResourcePolicy;
@@ -116,20 +117,7 @@ public class ItemUtils
                     }
                     valueElem = qualifier;
                 }
-                if(val.schema.equals("rioxxterms")&&val.element.equals("funder")){
-                    try {
-                        AuthorityValueFinder authorityValueFinder = new AuthorityValueFinder();
-                        AuthorityValue authorityValue =authorityValueFinder.findByUID(new Context(), val.authority);
-                        if(authorityValue instanceof FunderAuthorityValue){
-                            String id= ((FunderAuthorityValue)authorityValue).getFunderID();
-                            valueElem.getField().add(createValue(factory, "authorityID", "http://dx.doi.org/"+id));
-                        }
-                    } catch (SQLException e) {
-                        log.error(e);
-                    }
 
-
-                }
             }
 
             // Language?
@@ -162,6 +150,30 @@ public class ItemUtils
                 if (val.confidence != Choices.CF_NOVALUE)
                     valueElem.getField().add(createValue(factory, "confidence", val.confidence + ""));
             }
+			AuthorityValueFinder authorityValueFinder = new AuthorityValueFinder();
+			try {
+				Context context = new Context();
+
+
+				AuthorityValue authorityValue = authorityValueFinder.findByUID(context, val.authority);
+				context.abort();
+				if (authorityValue!=null) {
+					if (authorityValue instanceof FunderAuthorityValue) {
+						String id = ((FunderAuthorityValue) authorityValue).getFunderID();
+						valueElem.getField().add(createValue("authorityID", "http://dx.doi.org/" + id));
+
+					} else if (authorityValue instanceof OrcidAuthorityValue) {
+						String id = ((OrcidAuthorityValue) authorityValue).getOrcid_id();
+						valueElem.getField().add(createValue("authorityID", "http://orcid.org/"+id));
+					}
+				}
+
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+
         }
         // Done! Metadata has been read!
         // Now adding bitstream info
@@ -183,19 +195,13 @@ public class ItemUtils
                 bundle.getElement().add(bitstreams);
                 Bitstream[] bits = b.getBitstreams();
 
-                Bitstream bit = null;
 
-                for (Bitstream bitstream : bits) {
 
-                    if (b.getPrimaryBitstreamID() != -1) {
-                        if (bit.getID() == b.getPrimaryBitstreamID()) {
-                            bit = bitstream;
-                        }
-                    } else if (b.getName().equals("ORIGINAL")) {
-                        bit = bitstream;
-                    }
-
-                }
+				for (Bitstream bts : bits) {
+					boolean primary=false;
+					if(b.getName().equals("ORIGINAL")&&(b.getPrimaryBitstreamID() != -1||bts.getID()==bits[0].getID()))
+						primary=true;
+					Bitstream  bit=bts;
 
                 if (bit != null) {
 
@@ -263,11 +269,13 @@ public class ItemUtils
                     bitstream.getField().add(
                             createValue(factory, "sid", bit.getSequenceID()
                                     + ""));
+						bitstream.getField().add(
+								createValue("primary", primary
+										+ ""));
                 }
             }
         }
-        catch (SQLException e1)
-        {
+		} catch (SQLException e1) {
             e1.printStackTrace();
         }
 
