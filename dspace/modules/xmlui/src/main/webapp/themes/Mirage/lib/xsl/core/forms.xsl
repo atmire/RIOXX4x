@@ -210,7 +210,7 @@
             <xsl:apply-templates select="dri:help" mode="help"/>
         </xsl:if>
         <xsl:apply-templates select="." mode="normalField"/>
-        <xsl:if test="contains(dri:params/@operations,'add')">
+        <xsl:if test="contains(dri:params/@operations,'add') and not(dri:params/@authorityControlled='yes')">
             <!-- Add buttons should be named "submit_[field]_add" so that we can ignore errors from required fields when simply adding new values-->
             <input type="submit" value="Add" name="{concat('submit_',@n,'_add')}" class="ds-button-field ds-add-button">
                 <!-- Make invisible if we have choice-lookup popup that provides its own Add. -->
@@ -226,6 +226,25 @@
                 </xsl:if>
             </input>
         </xsl:if>
+
+        <xsl:variable name="confidenceIndicatorID" select="concat(translate(@id,'.','_'),'_confidence_indicator')"/>
+        <xsl:if test="dri:params/@authorityControlled='yes' and dri:params/@choicesPresentation='authorLookup'">
+            <xsl:call-template name="addLookupButtonAuthor">
+                <xsl:with-param name="isName" select="'true'"/>
+                <xsl:with-param name="confIndicator" select="$confidenceIndicatorID"/>
+            </xsl:call-template>
+
+            <xsl:call-template name="authorityConfidenceIcon">
+                <xsl:with-param name="confidence" select="dri:value[@type='authority']/@confidence"/>
+                <xsl:with-param name="id" select="$confidenceIndicatorID"/>
+            </xsl:call-template>
+            <xsl:call-template name="authorityInputFields">
+                <xsl:with-param name="name" select="@n"/>
+                <xsl:with-param name="authValue" select="dri:value[@type='authority']/text()"/>
+                <xsl:with-param name="confValue" select="dri:value[@type='authority']/@confidence"/>
+            </xsl:call-template>
+        </xsl:if>
+
         <xsl:if test="$test">
             <xsl:apply-templates select="dri:error" mode="error"/>
         </xsl:if>

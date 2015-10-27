@@ -134,11 +134,11 @@ function AuthorLookup(url, authorityInput, collectionID) {
                 var variable = vcard.find('.variable');
                 variable.empty();
 
-                    if(!funderField && !projectField) {
-                predefinedOrder.forEach(function (entry) {
-                    variableItem(aData, entry, variable);
-                });
-                    }
+                if(!funderField && !projectField) {
+                    predefinedOrder.forEach(function (entry) {
+                        variableItem(aData, entry, variable);
+                    });
+                }
 
                 for (var key in aData) {
                     if (aData.hasOwnProperty(key) && notDisplayed.indexOf(key) < 0 && predefinedOrder.indexOf(key) < 0) {
@@ -150,7 +150,7 @@ function AuthorLookup(url, authorityInput, collectionID) {
                     var label = key.replace(/-/g, ' ');
                     var dataString = '';
                     dataString += '<li class="vcard-' + key + '">' +
-                        '<label>' + label + ': </label>';
+                    '<label>' + label + ': </label>';
 
                     if (key == 'orcid') {
                         dataString += '<span><a target="_blank" href="http://orcid.org/' + aData[key] + '">' + aData[key] + '</a></span>';

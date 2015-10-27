@@ -40,7 +40,9 @@
     <xsl:import href="lib/xsl/aspect/artifactbrowser/item-view.xsl"/>
     <xsl:import href="lib/xsl/aspect/artifactbrowser/community-list.xsl"/>
     <xsl:import href="lib/xsl/aspect/artifactbrowser/collection-list.xsl"/>
+    <xsl:import href="lib/xsl/custom/core/forms.xsl"/>
+    <xsl:import href="lib/xsl/custom/multiple-funders.xsl"/>
+    <xsl:import href="lib/xsl/custom/aspect/general/choice-authority-control.xsl"/>
     <xsl:output indent="yes"/>
     
-
 </xsl:stylesheet>
