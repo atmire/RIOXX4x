@@ -706,9 +706,7 @@
         <script type="text/javascript">
             <xsl:attribute name="src">
                 <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='contextPath'][not(@qualifier)]"/>
-                <xsl:text>/themes/</xsl:text>
-                <xsl:value-of select="/dri:document/dri:meta/dri:pageMeta/dri:metadata[@element='theme'][@qualifier='path']"/>
-                <xsl:text>/lib/js/jquery.dataTables.min.js</xsl:text>
+                <xsl:text>/static/Datatables/DataTables-1.8.0/media/js/jquery.dataTables.min.js</xsl:text>
             </xsl:attribute>&#160;</script>
         <!--"AtuhorLookup"-->
         <script type="text/javascript">
