@@ -89,7 +89,17 @@
 
             <Filter refid="rioxxTypeExistsFilter" />
             <Filter refid="itemsWithBitstreamsFilter" />
+            <Filter refid="titleexistsFilter" />
+            <Filter refid="authorexistsFilter" />
+            <Filter refid="rioxxProjectExistsCondition" />
+            <Filter refid="rioxxFunderExistsCondition" />
+            <Filter refid="rioxxLicenseExistsCondition" />
+            <Filter refid="rioxxDctermsdateacceptedExistsCondition" />
+            <Filter refid="rioxxtermsversionCondition" />
+            <Filter refid="rioxxLangExistsCondition" />
 
+            <!-- Metadata Formats -->
+            <Format refid="oaidc"/>
             <Format refid="rioxx" />
             <Format refid="xoai" />
         </Context>
@@ -288,6 +298,47 @@
             <Class>org.dspace.xoai.filter.ItemsWithBitstreamFilter</Class>
         </Filter>
 
+        <Filter id="rioxxProjectExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Parameter key="field">
+                <Value>rioxxterms.identifier.project</Value>
+            </Parameter>
+        </Filter>
+
+        <Filter id="rioxxFunderExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Parameter key="field">
+                <Value>rioxxterms.funder</Value>
+            </Parameter>
+        </Filter>
+
+        <Filter id="rioxxLicenseExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Parameter key="field">
+                <Value>rioxxterms.licenseref.uri</Value>
+            </Parameter>
+        </Filter>
+
+        <Filter id="rioxxLangExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Parameter key="field">
+                <Value>dc.language.iso</Value>
+            </Parameter>
+        </Filter>
+
+        <Filter id="rioxxDctermsdateacceptedExistsCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Parameter key="field">
+                <Value>dcterms.dateAccepted</Value>
+            </Parameter>
+        </Filter>
+
+        <Filter id="rioxxtermsversionCondition">
+            <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
+            <Parameter key="field">
+                <Value>rioxxterms.version</Value>
+            </Parameter>
+        </Filter>
 
     </Filters>
 
