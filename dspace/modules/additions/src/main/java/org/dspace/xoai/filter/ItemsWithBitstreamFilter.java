@@ -17,7 +17,6 @@ import java.sql.SQLException;
  */
 public class ItemsWithBitstreamFilter extends DSpaceFilter {
 
-    private Context context;
     private static Logger log = LogManager.getLogger(ItemsWithBitstreamFilter.class);
 
     @Override
@@ -35,7 +34,7 @@ public class ItemsWithBitstreamFilter extends DSpaceFilter {
         try {
             String handle = DSpaceItem.parseHandle(item.getIdentifier());
             if (handle == null) return false;
-            Item dspaceItem = (Item) HandleManager.resolveToObject(context, handle);
+            Item dspaceItem = (Item) HandleManager.resolveToObject(getContext(), handle);
             for (Bundle b : dspaceItem.getBundles("ORIGINAL")) {
                 if (b.getBitstreams().length > 0) {
                     return true;
