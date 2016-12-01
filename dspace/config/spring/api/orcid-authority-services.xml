@@ -24,9 +24,16 @@
 
     <!-- Authority control -->
     <bean class="org.dspace.authority.AuthoritySolrServiceImpl" id="org.dspace.authority.AuthoritySearchService"/>
-    <alias name="org.dspace.authority.AuthoritySearchService" alias="org.dspace.authority.indexer.AuthorityIndexingService"/>
+    <alias name="org.dspace.authority.AuthoritySearchService"
+           alias="org.dspace.authority.indexer.AuthorityIndexingService"/>
 
-    <bean id="dspace.DSpaceAuthorityIndexer" class="org.dspace.authority.indexer.DSpaceAuthorityIndexer"/>
+    <bean id="dspace.DSpaceAuthorityIndexer" class="org.dspace.authority.indexer.DSpaceAuthorityIndexer" scope="prototype"/>
+    <bean id="workspaceAuthorityIndexer" class="org.dspace.authority.indexer.WorkspaceAuthorityIndexer" scope="prototype"/>
+    <bean id="funderAuthorityIndexer" class="org.dspace.authority.indexer.FunderAuthorityIndexer" scope="prototype"/>
+    <bean id="defaultProjectAuthorityIndexer"
+          class="org.dspace.authority.indexer.DefaultProjectAuthorityIndexer" scope="prototype">
+        <property name="defaultAuthorityCreator" ref="defaultAuthorityCreator"/>
+    </bean>
 
     <bean name="AuthorityTypes" class="org.dspace.authority.AuthorityTypes">
         <property name="types">
@@ -70,5 +77,7 @@
     </util:map>
 
     <bean name="ProjectService" class="org.dspace.project.ProjectService"/>
+
+    <bean name="defaultAuthorityCreator" class="org.dspace.authority.DefaultAuthorityCreator"/>
 
 </beans>

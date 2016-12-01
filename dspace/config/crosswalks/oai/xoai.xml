@@ -316,6 +316,7 @@
             <Class>org.dspace.xoai.filter.DSpaceMetadataExistsFilter</Class>
             <Parameter key="field">
                 <Value>rioxxterms.licenseref.uri</Value>
+                <Value>dc.rights.uri</Value>
             </Parameter>
         </Filter>
 

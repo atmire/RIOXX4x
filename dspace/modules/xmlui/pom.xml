@@ -52,16 +52,22 @@
                   <overlay>
                      <groupId>org.dspace</groupId>
                      <artifactId>dspace-xmlui-lang</artifactId>
+                                    <type>war</type>
                      <excludes>
                         <!--  
                            keep lang web.xml from overiding xmlui
                         -->
                         <exclude>WEB-INF/web.xml</exclude>
+                                        <exclude>WEB-INF/classes/**</exclude>
                      </excludes>
                   </overlay>
                   <overlay>
                      <groupId>org.dspace</groupId>
                      <artifactId>dspace-xmlui</artifactId>
+                                    <type>war</type>
+                                    <excludes>
+                                        <exclude>WEB-INF/classes/**</exclude>
+                                    </excludes>
                   </overlay>
                </overlays>
             </configuration>

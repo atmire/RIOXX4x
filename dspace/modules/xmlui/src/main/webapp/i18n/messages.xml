@@ -1412,6 +1412,7 @@
     <message key="xmlui.administrative.item.general.option_view">View Item</message>
     <message key="xmlui.administrative.item.general.option_curate">Curate</message>
     <message key="xmlui.administrative.item.general.option_queue">Queue</message>
+    <message key="xmlui.administrative.item.general.option_funding">Item Funding</message>
 
     <!-- org.dspace.app.xmlui.administrative.item.AddBitstreamForm -->
     <message key="xmlui.administrative.item.AddBitstreamForm.title">Upload Bitstream</message>
@@ -1567,6 +1568,10 @@
     <message key="xmlui.administrative.item.FindItemForm.identifier_label">Internal Item ID/Item Handle</message>
     <message key="xmlui.administrative.item.FindItemForm.identifier_error">Unable to resolve identifier.</message>
     <message key="xmlui.administrative.item.FindItemForm.find">Find</message>
+
+    <!--org.dspace.app.xmlui.aspect.administrative.item.EditItemFundingForm -->
+    <message key="xmlui.administrative.item.EditItemFundingForm.title">Edit funding</message>
+    <message key="xmlui.administrative.item.EditItemFundingForm.trail">Edit funding</message>
 
     <!-- org.dspace.app.xmlui.administrative.metadataimport -->
     <message key="xmlui.administrative.metadataimport.general.title">Import Metadata</message>
@@ -2380,9 +2385,35 @@
         </p>
     </message>
     <message key="xmlui.Submission.submit.ProjectStep.remove">Remove</message>
+    <message key="xmlui.Submission.submit.ProjectStep.add">Add</message>
     <message key="xmlui.Submission.submit.ProjectStep.create_project_error">Unable to create the project. Make sure a
         project with the same name does not yet exist. Don't forget to select a funder for new projects.
     </message>
     <message key="xmlui.Submission.submit.ProjectStep.lookup_project_error">Unable to find the project..</message>
+
+    <message key="xmlui.Submission.submit.ProjectStep.default_project_warning">Caution: Without manually selecting a project or funder, this submission will receive project ID "{0}" and funder "{1}".</message>
+    <message key="xmlui.Submission.submit.ProjectStep.no_default_project_warning">Caution: Without manually selecting a project or funder, this submission will not receive the required  project ID and funder. Please make sure to complete these fields using the provided lookup.</message>
+    <message key="xmlui.Submission.submit.ProjectStep.no_default_project_compliance_warning">Caution: Without manually selecting a project or funder, this submission will not receive a project ID or funder. If this submission is desired to be RIOXX compliant, please make sure to complete these fields using the provided lookup.</message>
+    <message key="xmlui.Submission.submit.ProjectStep.funders_without_authority_head">Sponsorship and Other Sources of Funding</message>
+    <message key="xmlui.Submission.submit.ProjectStep.funders_without_authority_hint">Add sponsorships or other sources of funding that did not provide a formal project or grant ID. This field can also be used to acknowledge funders who do not appear in the FundRef registry, such as corporations or startup companies.</message>
+
+    <message key="xmlui.Submission.submit.UploadStep.rioxx_version">
+        <p>Earlier in the submission, you indicated that you wanted to upload following version of the publication:</p>
+        <h3>{0}</h3>
+        <p>If you are uploading multiple files as part of this submission, please ensure this file is marked as "Primary".</p>
+    </message>
+    <message key="xmlui.ArtifactBrowser.SimpleSearch.filter.funder">Funder</message>
+
+    <message key="xmlui.submission.submit.input.rioxxterms.openaccess.uri">
+        <p>If you are not able to upload the full text of your submission but the full text is available elsewhere, you
+            can the URL to the full text on that location here.
+        </p>
+    </message>
+    <message key="xmlui.Submission.submit.input.rioxxterms.licenseref.uri.hint">
+        <p>HTTP URI to a resource which expresses the license terms specifying how the resource may be used. In the absence of any other license, the copyright holder reserves all rights automatically. As a convenience, you can use any of the two URLs to explicitly convey this state:</p>
+        <br/>
+        <p><a href="http://www.rioxx.net/licenses/all-rights-reserved">http://www.rioxx.net/licenses/all-rights-reserved</a></p>
+        <p><a href="http://www.rioxx.net/licenses/under-embargo-all-rights-reserved">http://www.rioxx.net/licenses/under-embargo-all-rights-reserved</a></p>
+    </message>
 
 </catalogue>

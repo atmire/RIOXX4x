@@ -7,38 +7,23 @@
  */
 package org.dspace.xoai.util;
 
-import com.lyncode.xoai.dataprovider.util.Base64Utils;
-import com.lyncode.xoai.dataprovider.xml.xoai.Element;
-import com.lyncode.xoai.dataprovider.xml.xoai.Metadata;
-import com.lyncode.xoai.dataprovider.xml.xoai.ObjectFactory;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.dspace.authority.AuthorityValue;
-import org.dspace.authority.AuthorityValueFinder;
-import org.dspace.authority.FunderAuthorityValue;
-import org.dspace.authority.orcid.OrcidAuthorityValue;
-import org.dspace.authorize.AuthorizeException;
-import org.dspace.authorize.AuthorizeManager;
-import org.dspace.authorize.ResourcePolicy;
-import org.dspace.content.Bitstream;
-import org.dspace.content.Bundle;
-import org.dspace.content.DCValue;
-import org.dspace.content.Item;
-import org.dspace.content.authority.Choices;
-import org.dspace.core.ConfigurationManager;
-import org.dspace.core.Constants;
-import org.dspace.core.Context;
-import org.dspace.core.Utils;
-import org.dspace.eperson.Group;
-import org.dspace.xoai.data.DSpaceDatabaseItem;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import com.lyncode.xoai.dataprovider.util.*;
+import com.lyncode.xoai.dataprovider.xml.xoai.*;
+import java.io.*;
+import java.sql.*;
+import java.text.*;
 import java.util.Date;
-import java.util.List;
+import java.util.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.*;
+import org.dspace.authority.*;
+import org.dspace.authority.orcid.*;
+import org.dspace.authorize.*;
+import org.dspace.content.*;
+import org.dspace.content.authority.*;
+import org.dspace.core.*;
+import org.dspace.eperson.*;
+import org.dspace.xoai.data.*;
 
 /**
  *
@@ -166,8 +151,11 @@ public class ItemUtils
 						String id = ((OrcidAuthorityValue) authorityValue).getOrcid_id();
 						valueElem.getField().add(createValue("authorityID", "http://orcid.org/"+id));
 					}
+					else if (authorityValue instanceof ProjectAuthorityValue){
+						String funderAuthorityId = ((ProjectAuthorityValue) authorityValue).getFunderAuthorityValue().getId();
+						valueElem.getField().add(createValue("funderAuthorityID", funderAuthorityId));
 				}
-
+				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -199,7 +187,10 @@ public class ItemUtils
 
 				for (Bitstream bts : bits) {
 					boolean primary=false;
-					if(b.getName().equals("ORIGINAL")&&(b.getPrimaryBitstreamID() != -1||bts.getID()==bits[0].getID()))
+                    // Check if current bitstream is in original bundle + 1 of the 2 following
+                    // Bitstream = primary bitstream in bundle -> true
+                    // No primary bitstream found in bundle-> only the first one gets flagged as "primary"
+                    if (b.getName().equals("ORIGINAL") && (b.getPrimaryBitstreamID() == bts.getID() || b.getPrimaryBitstreamID() == -1 && bts.getID() == bits[0].getID()))
 						primary=true;
 					Bitstream  bit=bts;
 

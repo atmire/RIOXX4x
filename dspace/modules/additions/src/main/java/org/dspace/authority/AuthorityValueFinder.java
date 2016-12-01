@@ -45,12 +45,18 @@ public class AuthorityValueFinder {
     }
 
     public List<AuthorityValue> findByExactValue(Context context, String field, String value) {
-        String queryString = "value:\"" + value + "\" AND field:\"" + field + "\"";
+        String queryString = "value_keyword:\"" + value + "\" AND field:\"" + field + "\"";
         return find(context, queryString);
     }
 
-    public AuthorityValue findByProjectID(Context context, String projectID) {
-        String queryString = "value:\"" + projectID + "\"";
+    public AuthorityValue findByFunderID(Context context, String funderID) {
+        String queryString = "label_funderID:\"" + funderID + "\"";
+        List<AuthorityValue> findings = find(context, queryString);
+        return findings.size() > 0 ? findings.get(0) : null;
+    }
+
+    public AuthorityValue findByProjectIDAndFunderId(Context context, String projectId, String funderID) {
+        String queryString = "value_keyword:\"" + projectId + "\" AND label_funder_authority_ID:\"" + funderID +"\"";
         List<AuthorityValue> findings = find(context, queryString);
         return findings.size() > 0 ? findings.get(0) : null;
     }
@@ -58,11 +64,6 @@ public class AuthorityValueFinder {
     public List<AuthorityValue> findByValue(Context context, String field, String value) {
         String queryString = "value:\"" + value + "\" AND field:\"" + field + "\"";
         return find(context, queryString);
-    }
-    public AuthorityValue findByFunderID(Context context, String funderID) {
-        String queryString = "label_funderID:\"" + funderID + "\"";
-        List<AuthorityValue> findings = find(context, queryString);
-        return findings.size() > 0 ? findings.get(0) : null;
     }
 
     public List<AuthorityValue> findByValue(Context context, String schema, String element, String qualifier, String value) {
@@ -98,11 +99,28 @@ public class AuthorityValueFinder {
         return find(context, queryString);
     }
 
+    public List<AuthorityValue> findByAuthorityType(Context context, String type, int page, int pageSize) {
+        String queryString = "authority_type:\"" + type + "\"";
+        return find(context, queryString, page, pageSize);
+    }
+
     private List<AuthorityValue> find(Context context, String queryString) {
+        return find(context, queryString, -1, -1);
+    }
+
+    private List<AuthorityValue> find(Context context, String queryString, int page, int pageSize) {
         List<AuthorityValue> findings = new ArrayList<AuthorityValue>();
         try {
             SolrQuery solrQuery = new SolrQuery();
             solrQuery.setQuery(filtered(queryString));
+
+            if(page >= 0) {
+                solrQuery.setStart(page * pageSize);
+            }
+            if(pageSize >= 0) {
+                solrQuery.setRows(pageSize);
+            }
+
             log.debug("AuthorityValueFinder makes the query: " + queryString);
             QueryResponse queryResponse = SolrAuthority.getSearchService().search(solrQuery);
             if (queryResponse != null && queryResponse.getResults() != null && 0 < queryResponse.getResults().getNumFound()) {

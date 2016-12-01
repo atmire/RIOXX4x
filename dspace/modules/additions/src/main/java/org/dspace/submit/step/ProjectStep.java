@@ -1,27 +1,22 @@
 package org.dspace.submit.step;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.dspace.app.util.SubmissionInfo;
-import org.dspace.app.util.Util;
-import org.dspace.authority.ProjectAuthorityValue;
-import org.dspace.authorize.AuthorizeException;
+import java.io.*;
+import java.sql.*;
+import java.util.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import org.apache.commons.lang.*;
+import org.apache.log4j.*;
+import org.dspace.app.util.*;
+import org.dspace.authority.*;
+import org.dspace.authorize.*;
 import org.dspace.content.Collection;
-import org.dspace.content.DCValue;
-import org.dspace.content.Item;
-import org.dspace.content.MetadataField;
-import org.dspace.content.authority.Choices;
-import org.dspace.core.ConfigurationManager;
-import org.dspace.core.Context;
-import org.dspace.project.ProjectService;
-import org.dspace.submit.AbstractProcessingStep;
-import org.dspace.utils.DSpace;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.SQLException;
+import org.dspace.content.*;
+import org.dspace.content.authority.*;
+import org.dspace.core.*;
+import org.dspace.project.*;
+import org.dspace.submit.*;
+import org.dspace.utils.*;
 
 /**
  * Created by Philip Vissenaekens (philip at atmire dot com)
@@ -36,7 +31,9 @@ public class ProjectStep extends AbstractProcessingStep {
     public static final int LOOKUP_PROJECT_ERROR = 3;
     public static final int REMOVE_PROJECT_SUCCESS = 4;
     public static final int No_PROJECTS_ADDED = 5;
+
     private ProjectService projectService = new DSpace().getServiceManager().getServiceByName("ProjectService", ProjectService.class);
+    private DefaultAuthorityCreator defaultAuthorityCreator = new DSpace().getServiceManager().getServiceByName("defaultAuthorityCreator", DefaultAuthorityCreator.class);
 
     @Override
     public int doProcessing(Context context, HttpServletRequest request, HttpServletResponse response, SubmissionInfo subInfo) throws ServletException, IOException, SQLException, AuthorizeException {
@@ -50,6 +47,7 @@ public class ProjectStep extends AbstractProcessingStep {
         String nextButton = "submit_next";
         String addButton = "submit_add";
 
+        addFundersWithoutAuthority(context, request, item);
 
         if (buttonPressed.startsWith(removeButton))
         {
@@ -94,14 +92,25 @@ public class ProjectStep extends AbstractProcessingStep {
                 DCValue[] dcValues = item.getMetadata("rioxxterms", "identifier", "project", Item.ANY);
 
                 if(dcValues.length==0){
+                    if(ConfigurationManager.getBooleanProperty("rioxx", "submission.funder.required")){
                     addErrorField(request, MetadataField.formKey("rioxxterms", "identifier", "project"));
-                    return No_PROJECTS_ADDED;
+                        success = No_PROJECTS_ADDED;
+                    }
                 }
             }
             return success;
         }
 
         return STATUS_COMPLETE;
+    }
+
+    private void addFundersWithoutAuthority(final Context context, final HttpServletRequest request, final Item item) throws SQLException, AuthorizeException {
+        item.clearMetadata("dc", "description", "sponsorship",  Item.ANY);
+
+        readText(request, item, "dc", "description", "sponsorship", true, getDefaultLanguageQualifier());
+
+        item.update();
+        context.commit();
     }
 
     private int processProjectField(Context context, HttpServletRequest request, Item item, String schema,
@@ -111,7 +120,14 @@ public class ProjectStep extends AbstractProcessingStep {
         String value = request.getParameter(metadataField);
         String av = request.getParameter(metadataField + "_authority");
         String cv = request.getParameter(metadataField + "_confidence");
+        if (StringUtils.isBlank(value) && noProjectAndFunderAttached(item)) {
+            ProjectAuthorityValue project = defaultAuthorityCreator.retrieveDefaultProject(context);
 
+            if(project!=null) {
+                value = project.getValue();
+                av = project.getId();
+            }
+        }
         if(StringUtils.isNotBlank(value)) {
             if (StringUtils.isNotBlank(av)) {
                 try {
@@ -133,6 +149,13 @@ public class ProjectStep extends AbstractProcessingStep {
             else {
                 String funderAuthority = request.getParameter(MetadataField.formKey("rioxxterms", "funder", null)+ "_authority");
                 try{
+                    if (StringUtils.isBlank(funderAuthority)) {
+                        FunderAuthorityValue defaultAuthority = defaultAuthorityCreator.retrieveDefaultFunder(context);
+
+                        if(defaultAuthority!=null) {
+                            funderAuthority = defaultAuthority.getId();
+                        }
+                    }
                     ProjectAuthorityValue project = projectService.createProject(context, value, funderAuthority);
                     item.addMetadata("rioxxterms", "identifier", "project", getDefaultLanguageQualifier(), value, project.getId(), Choices.CF_ACCEPTED);
                     item.addMetadata("rioxxterms", "funder", null, getDefaultLanguageQualifier(), project.getFunderAuthorityValue().getValue(),
@@ -154,6 +177,13 @@ public class ProjectStep extends AbstractProcessingStep {
         return success;
     }
 
+    private boolean noProjectAndFunderAttached(Item item) {
+        DCValue[] funders = item.getMetadata("rioxxterms", "funder", null, Item.ANY);
+        DCValue[] projects = item.getMetadata("rioxxterms", "identifier", "project", Item.ANY);
+        return funders.length == 0 && projects.length == 0;
+    }
+
+
     @Override
     public int getNumberOfPages(HttpServletRequest request, SubmissionInfo subInfo) throws ServletException {
         return 1;
@@ -169,4 +199,123 @@ public class ProjectStep extends AbstractProcessingStep {
         }
         return language;
     }
+
+    protected void readText(HttpServletRequest request, Item item, String schema,
+                            String element, String qualifier, boolean repeated, String lang) {
+        // some other way
+        String metadataField = MetadataField
+                .formKey(schema, element, qualifier);
+
+        String fieldKey = MetadataAuthorityManager.makeFieldKey(schema, element, qualifier);
+        boolean isAuthorityControlled = MetadataAuthorityManager.getManager().isAuthorityControlled(fieldKey);
+
+        // Values to add
+        List<String> vals = null;
+        List<String> auths = null;
+        List<String> confs = null;
+
+        if (repeated) {
+            vals = getRepeatedParameter(request, metadataField, metadataField);
+            if (isAuthorityControlled) {
+                auths = getRepeatedParameter(request, metadataField, metadataField + "_authority");
+                confs = getRepeatedParameter(request, metadataField, metadataField + "_confidence");
+            }
+
+        } else {
+            // Just a single name
+            vals = new LinkedList<String>();
+            String value = request.getParameter(metadataField);
+            if (value != null) {
+                vals.add(value.trim());
+            }
+            if (isAuthorityControlled) {
+                auths = new LinkedList<String>();
+                confs = new LinkedList<String>();
+                String av = request.getParameter(metadataField + "_authority");
+                String cv = request.getParameter(metadataField + "_confidence");
+                auths.add(av == null ? "" : av.trim());
+                confs.add(cv == null ? "" : cv.trim());
+            }
+        }
+
+        // Put the names in the correct form
+        for (int i = 0; i < vals.size(); i++) {
+            // Add to the database if non-empty
+            String s = vals.get(i);
+            if ((s != null) && !s.equals("")) {
+                if (isAuthorityControlled) {
+                    String authKey = auths.size() > i ? auths.get(i) : null;
+                    String sconf = (authKey != null && confs.size() > i) ? confs.get(i) : null;
+                    if (MetadataAuthorityManager.getManager().isAuthorityRequired(fieldKey) &&
+                            (authKey == null || authKey.length() == 0)) {
+                        log.warn("Skipping value of " + metadataField + " because the required Authority key is missing or empty.");
+                        addErrorField(request, metadataField);
+                    } else {
+                        item.addMetadata(schema, element, qualifier, lang, s,
+                                authKey, (sconf != null && sconf.length() > 0) ?
+                                        Choices.getConfidenceValue(sconf) : Choices.CF_ACCEPTED);
+                    }
+                } else {
+                    item.addMetadata(schema, element, qualifier, lang, s);
+                }
+            }
+        }
+    }
+
+    protected List<String> getRepeatedParameter(HttpServletRequest request,
+                                                String metadataField, String param) {
+        List<String> vals = new LinkedList<String>();
+
+        int i = 1;    //start index at the first of the previously entered values
+        boolean foundLast = false;
+
+        // Iterate through the values in the form.
+        while (!foundLast) {
+            String s = null;
+
+            //First, add the previously entered values.
+            // This ensures we preserve the order that these values were entered
+            s = request.getParameter(param + "_" + i);
+
+            // If there are no more previously entered values,
+            // see if there's a new value entered in textbox
+            if (s == null) {
+                s = request.getParameter(param);
+                //this will be the last value added
+                foundLast = true;
+            }
+
+            // We're only going to add non-null values
+            if (s != null) {
+                boolean addValue = true;
+
+                // Check to make sure that this value was not selected to be
+                // removed.
+                // (This is for the "remove multiple" option available in
+                // Manakin)
+                String[] selected = request.getParameterValues(metadataField
+                        + "_selected");
+
+                if (selected != null) {
+                    for (int j = 0; j < selected.length; j++) {
+                        if (selected[j].equals(metadataField + "_" + i)) {
+                            addValue = false;
+                        }
+                    }
+                }
+
+                if (addValue) {
+                    vals.add(s.trim());
+                }
+            }
+
+            i++;
+        }
+
+        log.debug("getRepeatedParameter: metadataField=" + metadataField
+                + " param=" + metadataField + ", return count = " + vals.size());
+
+        return vals;
+    }
+
 }

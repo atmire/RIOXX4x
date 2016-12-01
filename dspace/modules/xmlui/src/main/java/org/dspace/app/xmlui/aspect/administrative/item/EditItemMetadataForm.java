@@ -46,6 +46,7 @@ public class EditItemMetadataForm extends AbstractDSpaceTransformer {
         private static final Message T_option_metadata = message("xmlui.administrative.item.general.option_metadata");
         private static final Message T_option_view = message("xmlui.administrative.item.general.option_view");
         private static final Message T_option_curate = message("xmlui.administrative.item.general.option_curate");
+    private static final Message T_option_funding = message("xmlui.administrative.item.general.option_funding");
 
         private static final Message T_title = message("xmlui.administrative.item.EditItemMetadataForm.title");
         private static final Message T_trail = message("xmlui.administrative.item.EditItemMetadataForm.trail");
@@ -73,7 +74,12 @@ public class EditItemMetadataForm extends AbstractDSpaceTransformer {
                 pageMeta.addMetadata("choice", "collection").addContent(String.valueOf(collectionID));
                 pageMeta.addMetadata("title").addContent(T_title);
 
+
+        pageMeta.addMetadata("stylesheet", "screen", "datatables", true).addContent("../../static/Datatables/DataTables-1.8.0/media/css/datatables.css");
+        pageMeta.addMetadata("javascript", "static", "datatables", true).addContent("static/Datatables/DataTables-1.8.0/media/js/jquery.dataTables.min.js");
             pageMeta.addMetadata("stylesheet", "screen", "person-lookup", true).addContent("../../static/css/authority/person-lookup.css");
+        pageMeta.addMetadata("javascript", null, "person-lookup", true).addContent("../../static/js/person-lookup.js");
+
 
                 pageMeta.addTrailLink(contextPath + "/", T_dspace_home);
                 pageMeta.addTrailLink(contextPath + "/admin/item", T_item_trail);
@@ -133,6 +139,7 @@ public class EditItemMetadataForm extends AbstractDSpaceTransformer {
           options.addItem().addXref(baseURL+"&submit_status",T_option_status);
           options.addItem().addXref(baseURL+"&submit_bitstreams",T_option_bitstreams);
           options.addItem().addHighlight("bold").addXref(baseURL+"&submit_metadata",T_option_metadata);
+            options.addItem().addXref(baseURL + "&submit_funding", T_option_funding);
           options.addItem().addXref(baseURL + "&view_item", T_option_view);
           options.addItem().addXref(baseURL + "&submit_curate", T_option_curate);
         }
