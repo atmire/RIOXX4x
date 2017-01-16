@@ -7,46 +7,30 @@
  */
 package org.dspace.xoai.app;
 
-import com.lyncode.xoai.dataprovider.exceptions.MetadataBindException;
-import com.lyncode.xoai.dataprovider.util.MarshallingUtils;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.PosixParser;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
-import org.dspace.authorize.AuthorizeException;
-import org.dspace.authorize.AuthorizeManager;
-import org.dspace.content.*;
-import org.dspace.core.ConfigurationManager;
-import org.dspace.core.Constants;
-import org.dspace.core.Context;
-import org.dspace.storage.rdbms.DatabaseManager;
-import org.dspace.storage.rdbms.TableRowIterator;
-import org.dspace.xoai.data.DSpaceDatabaseItem;
-import org.dspace.xoai.exceptions.CompilingException;
-import org.dspace.xoai.solr.DSpaceSolrSearch;
-import org.dspace.xoai.solr.DSpaceSolrServer;
-import org.dspace.xoai.solr.exceptions.DSpaceSolrException;
-import org.dspace.xoai.solr.exceptions.DSpaceSolrIndexerException;
-import org.dspace.xoai.util.DateUtils;
-import org.dspace.xoai.util.ItemUtils;
-import org.dspace.xoai.util.XOAICacheManager;
-import org.dspace.xoai.util.XOAIDatabaseManager;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.ConnectException;
-import java.sql.SQLException;
+import com.lyncode.xoai.dataprovider.exceptions.*;
+import com.lyncode.xoai.dataprovider.util.*;
+import java.io.*;
+import java.net.*;
+import java.sql.*;
 import java.text.ParseException;
-import java.util.Arrays;
+import java.util.*;
 import java.util.Date;
+import org.apache.commons.cli.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.*;
+import org.apache.solr.client.solrj.*;
+import org.apache.solr.client.solrj.SolrQuery.*;
+import org.apache.solr.common.*;
+import org.dspace.authorize.*;
+import org.dspace.content.*;
+import org.dspace.content.Collection;
+import org.dspace.core.*;
+import org.dspace.storage.rdbms.*;
+import org.dspace.xoai.data.*;
+import org.dspace.xoai.exceptions.*;
+import org.dspace.xoai.solr.*;
+import org.dspace.xoai.solr.exceptions.*;
+import org.dspace.xoai.util.*;
 
 /**
  * 
@@ -290,26 +274,16 @@ public class XOAI
         return doc;
     }
 
-    private boolean isPublic(Item item)
-    {
-        try
-        {
-            AuthorizeManager.authorizeAction(_context, item, Constants.READ);
-            for (Bundle b : item.getBundles())
-                AuthorizeManager.authorizeAction(_context, b, Constants.READ);
-            return true;
-        }
-        catch (AuthorizeException ex)
-        {
-            log.debug(ex.getMessage());
-        }
-        catch (SQLException ex)
-        {
+    private boolean isPublic(Item item) {
+        boolean pub = false;
+        try {
+            //Check if READ access is allowed on this Item
+            pub = AuthorizeManager.authorizeActionBoolean(_context, item, Constants.READ);
+        } catch (SQLException ex) {
             log.error(ex.getMessage());
         }
-        return false;
+        return pub;
     }
-
 
     private static boolean getKnownExplanation(Throwable t)
     {
